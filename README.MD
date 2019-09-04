@@ -1,4 +1,12 @@
-alignItems 定义交叉轴上的对齐方式
-justifyContent 定义主轴上的对齐方式
-alignCenter
-alignSelf
+一个采用React-Native的ART 绘制的股票图
+
+1.分时图
+
+
+
+
+
+
+
+
+2.K线图待完成
