@@ -22,7 +22,7 @@ var childBottom = childStartY + childHeight;
 const TMarketView={};
 
 TMarketView.RenderMarketView=function(x,y,value,timeline){
-//        console.log("marketview",x,y,value);
+        console.log("marketview",x,y,value);
         let arr=[];
         if(y<0||y>childBottom){
             return;
@@ -40,30 +40,42 @@ TMarketView.RenderMarketView=function(x,y,value,timeline){
         linePath.moveTo(x,0).lineTo(x,mainHeight).moveTo(x,childStartY).lineTo(x,childBottom);
         //横向线
         linePath.moveTo(0,y).lineTo(mainWidth,y);
-         arr.push(<Shape key={70} d={ linePath } stroke="#000000"  strokeWidth={1} />);
-        //时间market矩形框
-        linePath.moveTo(x-15,mainHeight).lineTo(x+15,mainHeight).lineTo(x+15,childStartY).lineTo(x-15,childStartY).close();
-        arr.push(<Shape key={71} d={ linePath } fill="#4290EE" stroke="#4290EE"/>)
-        //时间market
-        arr.push(<Text key={72}  fill="#FFFFFF" font="10px"  x={x-15} y={mainHeight} >{TimeUtils("hh:mm",new Date(value.time))} </Text>);
+        arr.push(<Shape key={70} d={ linePath } stroke="#000000"  strokeWidth={1} />);
+        //时间market矩形框  时间market
+        let timePath = Path();
+        timePath.moveTo(x-15,mainHeight+2).lineTo(x+15,mainHeight+2).lineTo(x+15,childStartY-2).lineTo(x-15,childStartY-2).close();
+        arr.push(
+                    <Group>
+                        <Shape key={71} d={ timePath } fill="#4290EE" stroke="#4290EE"/>
+                        <Text key={72}  fill="#FFFFFF" font="10px"  x={x-15} y={mainHeight+3} >{TimeUtils("hh:mm",new Date(value.time))} </Text>
+                     </Group>
+                 );
         //Y轴
         if(y<mainHeight){
             //主图
            var price =  timeline.pixelsToValueMain(y);
            var formatP = timeline.getMainFormat(price);
-            //主图market矩形框
-            linePath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
-            arr.push(<Shape key={73} d={ linePath } fill="#4290EE" stroke="#4290EE"/>)
-            //价格market
-            arr.push(<Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatP} </Text>);
+            //主图market矩形框    价格market
+            let mainYPath = Path();
+            mainYPath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
+            arr.push(
+                            <Group>
+                                <Shape key={73} d={ mainYPath } fill="#4290EE" />
+                                <Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatP} </Text>
+                            </Group>
+                          );
         }else if(y>childStartY&&y<childBottom){
-              var chlidV =  timeline.pixelsToValueChild(y);
-              var formatv = timeline.getChildFormat(chlidV);
-             //子图market矩形框
-            linePath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
-            arr.push(<Shape key={73} d={ linePath } fill="#4290EE" stroke="#4290EE"/>)
-            //量market
-            arr.push(<Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatv} </Text>);
+              var childV =  timeline.pixelsToValueChild(y);
+              var formatV = timeline.getChildFormat(childV);
+             //子图market矩形框  量market
+            let childYPath = Path();
+            childYPath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
+            arr.push(
+                            <Group>
+                                <Shape key={73} d={ childYPath } fill="#4290EE"/>
+                                <Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatV} </Text>
+                             </Group>
+                            );
         }
         return arr;
 };

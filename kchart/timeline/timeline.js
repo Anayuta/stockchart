@@ -33,8 +33,8 @@ class TimeLine extends PureComponent {
                 mainDraw: this.mainDraws[0],
                 childDraw: this.childDraws[0],
                 //用于更新界面marketView
-                x: 0,
-                y: 0,
+                x: -1,
+                y: -1,
                 onDown:false,
             };
      };
@@ -47,7 +47,7 @@ class TimeLine extends PureComponent {
 
     //获取换算后的主图Y值
     getY(value){
-        return ((mValueMax - value) * Config.TimeHeight/3*2 / (mValueMax - mValueMin));
+         return this.state.mainDraw.getY(value,mValueMax,mValueMin);
     };
 
     //根据触摸的Y坐标换算为主图的数据
@@ -89,8 +89,8 @@ class TimeLine extends PureComponent {
                 this.tempFirstY = evt.nativeEvent.pageY;
                 console.log("按下");
                 this.setState({
-                    x:evt.nativeEvent.pageX,
-                    x:evt.nativeEvent.pageY,
+                    x:gestureState.dx,
+                    x:gestureState.dy,
                     onDown :true
                 });
 
@@ -109,6 +109,8 @@ class TimeLine extends PureComponent {
             onPanResponderRelease: (evt, gestureState) => {
                console.log("抬起");
                 this.setState({
+                    x:-1,
+                    y:-1,
                     onDown :false
                 });
             },///动作释放后做的动作
@@ -117,6 +119,16 @@ class TimeLine extends PureComponent {
             },
         });
     }
+
+    //设置主图格式化
+    setMainFormat(value){
+        this.state.mainDraw.setMainFormat(value);
+    }
+
+    //设置子图格式化
+     setChildFormat(value){
+         this.state.childDraw.setChildFormat(value);
+     }
 
     //计算得到选中的x
     calculateSelected(values){
@@ -134,6 +146,7 @@ class TimeLine extends PureComponent {
        }
 
     render() {
+
         {MainTRender.calculateValue(newlist);}
         for (var i = 0; i < newlist.length; i++) {
                var point = newlist[i];

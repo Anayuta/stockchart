@@ -18,6 +18,8 @@ var startY = mainHeight+Config.TimeTabHeight;
 
 var childBottom = startY + childHeight;
 
+var mValueFormat;
+
 const VolumeTRender={};
 
 //绘制轴上的文字
@@ -79,6 +81,10 @@ VolumeTRender.pixelsToValueChild = function(value,max,min){
      return max - (max - min) / childHeight * (value - startY);
 }
 
+//设置格式化处理器
+VolumeTRender.setChildFormat=function(value){
+    this.mValueFormat = value;
+}
 
 // 数值格式化
 VolumeTRender.formatValue=function(value,max,min){

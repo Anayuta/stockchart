@@ -17,6 +17,9 @@ var mainWidth = Config.TimeWidth;
  var mainSpaceHeight = mainHeight / 4;
 
 var textHeight = 12;
+
+var mValueFormat;
+
 //绘制轴上的文字
 MainTRender.RenderText = function(yesClose,max,min,offset,startTime,centerTime,endTime){
         let arrTxt = [];
@@ -76,12 +79,27 @@ MainTRender.RenderLine=function(values,timeline){
         return arrLine;
 };
 
+//设置格式化处理器
+MainTRender.setMainFormat=function(value){
+    this.mValueFormat = value;
+}
+
 // 数值格式化
 MainTRender.formatValue=function(value){
-    var num = new Number(value);
-    return num.toFixed(2);
+    if(undefined ===mValueFormat){
+        var num = new Number(value);
+        return num.toFixed(2);
+    }else{
+        return mValueFormat.format(value);
+    }
 };
 
+//根据数值获取主图Y坐标
+MainTRender.getY=function(value,max,min){
+        return ((max - value) * mainHeight / (max - min));
+};
+
+//根据主图Y坐标获取数值
 MainTRender.pixelsToValueMain=function(value,max,min){
         console.log(max,min,mainHeight,value);
         return max - (max - min) / mainHeight * value;

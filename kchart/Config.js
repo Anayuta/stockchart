@@ -7,4 +7,6 @@ Config.Total=241;
 Config.TDefalutChild=0;
 Config.TDefalutMain=0;
 //module.export = Config;
+//K线
+
 export default Config;
