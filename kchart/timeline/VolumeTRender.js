@@ -46,27 +46,27 @@ VolumeTRender.getMinValue= function(value,point){
 };
 //绘制量图
 VolumeTRender.RenderLine=function(values,timeline,max,min){
-      var r = 1;
-      var redVolumePath = Path();
-      var greenVolumePath = Path();
-      var gayVolumePath = Path();
+       var r = 1;
+       let arrLine = [];
        for(var i=0;i<values.length;i++){
             var point = values[i];
             if(point.colorIndex>0){
+               var redVolumePath = Path();
                redVolumePath.moveTo(timeline.getX(i)-r,childBottom).lineTo(timeline.getX(i)+r,childBottom)
-               .lineTo(timeline.getX(i)+r,this.getChildY(point.v,max,min)).lineTo(timeline.getX(i)-r,this.getChildY(point.v,max,min)).close();
+                    .lineTo(timeline.getX(i)+r,this.getChildY(point.v,max,min)).lineTo(timeline.getX(i)-r,this.getChildY(point.v,max,min)).close();
+                arrLine.push(<Shape key={100+i} d={ redVolumePath } fill='#ff0000'/>);
             }else if(point.colorIndex<0){
+                   var greenVolumePath = Path();
                   greenVolumePath.moveTo(timeline.getX(i)-r,childBottom).lineTo(timeline.getX(i)+r,childBottom)
                                .lineTo(timeline.getX(i)+r,this.getChildY(point.v,max,min)).lineTo(timeline.getX(i)-r,this.getChildY(point.v,max,min)).close();
+                   arrLine.push(<Shape key={100+i} d={ greenVolumePath } fill='#009900' />);
             }else{
+                 var gayVolumePath = Path();
                  gayVolumePath.moveTo(timeline.getX(i)-r,childBottom).lineTo(timeline.getX(i)+r,childBottom)
                                            .lineTo(timeline.getX(i)+r,this.getChildY(point.v,max,min)).lineTo(timeline.getX(i)-r,this.getChildY(point.v,max,min)).close();
+                 arrLine.push(<Shape key={100+i} d={ gayVolumePath } fill='#888888' />);
             }
        };
-        let arrLine = [];
-        arrLine.push(<Shape key={80} d={ redVolumePath } fill='#ff0000'/>);
-        arrLine.push(<Shape key={81} d={ greenVolumePath } fill='#009900' />);
-        arrLine.push(<Shape key={82} d={ gayVolumePath } fill='#888888' />);
 //        console.log(redVolumePath);
         return arrLine;
 };
