@@ -25,8 +25,8 @@ VolumeTRender.RenderText = function(yesClose,max,min){
         let arrTxt = [];
         //量图Y轴文字
         arrTxt.push(<Text key={0}  fill="#000000" font="10px"  x={0} y={startY} >成交量 </Text>);
-        arrTxt.push(<Text key={1}  fill="#000000" font="10px"  x={mainWidth-60} y={startY} >{this.formatValue(max)} </Text>);
-        arrTxt.push(<Text key={2}  fill="#000000" font="10px"  x={mainWidth-10} y={startY+childHeight-12} >{this.formatValue(min)} </Text>);
+        arrTxt.push(<Text key={1}  fill="#000000" font="10px"  x={mainWidth-60} y={startY} >{this.formatValue(max,0,0)} </Text>);
+        arrTxt.push(<Text key={2}  fill="#000000" font="10px"  x={mainWidth-10} y={startY+childHeight-12} >{this.formatValue(min,0,0)} </Text>);
         return arrTxt;
 };
 
@@ -64,9 +64,9 @@ VolumeTRender.RenderLine=function(values,timeline,max,min){
             }
        };
         let arrLine = [];
-//        arrLine.push(<Shape key={110} d={ redVolumePath } stroke='#ff0000' strokeWidth={ 1 } />);
-//        arrLine.push(<Shape key={111} d={ greenVolumePath } stroke='#009900' strokeWidth={ 1 } />);
-//        arrLine.push(<Shape key={112} d={ gayVolumePath } stroke='#888888' strokeWidth={ 1 } />);
+        arrLine.push(<Shape key={80} d={ redVolumePath } fill='#ff0000'/>);
+        arrLine.push(<Shape key={81} d={ greenVolumePath } fill='#009900' />);
+        arrLine.push(<Shape key={82} d={ gayVolumePath } fill='#888888' />);
 //        console.log(redVolumePath);
         return arrLine;
 };
@@ -75,8 +75,13 @@ VolumeTRender.getChildY=function(value,max,min){
     return childHeight / (max - min) * (max - value) +startY;
 }
 
+VolumeTRender.pixelsToValueChild = function(value,max,min){
+     return max - (max - min) / childHeight * (value - startY);
+}
+
+
 // 数值格式化
-VolumeTRender.formatValue=function(value){
+VolumeTRender.formatValue=function(value,max,min){
     var num = new Number(value);
     if(num>10000){
            num /=10000;
@@ -84,5 +89,7 @@ VolumeTRender.formatValue=function(value){
     }
     return num.toFixed(0);
 };
+
+
 
 export   default  VolumeTRender;

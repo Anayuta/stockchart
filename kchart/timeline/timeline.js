@@ -50,16 +50,30 @@ class TimeLine extends PureComponent {
         return ((mValueMax - value) * Config.TimeHeight/3*2 / (mValueMax - mValueMin));
     };
 
+    //根据触摸的Y坐标换算为主图的数据
+   pixelsToValueMain(value){
+        return this.state.mainDraw.pixelsToValueMain(value,mValueMax,mValueMin);
+   }
+
     // 获取主图格式化
     getMainFormat(value){
         return this.state.mainDraw.formatValue(value);
-    }
+    };
 
     //换算副图Y
     getChildY(value){
         return this.state.childDraw.getChildY(value,mChildMaxValue,mChildMinValue);
+    };
+
+    //副图单位格式化
+    getChildFormat(value){
+            return this.state.childDraw.formatValue(value,mChildMaxValue,mChildMinValue);
     }
 
+    //根据触摸的Y坐标换算为副图的数据
+    pixelsToValueChild(value){
+        return this.state.childDraw.pixelsToValueChild(value,mChildMaxValue,mChildMinValue);
+    }
 
     componentWillMount() {
         this._panResponder = PanResponder.create({
@@ -128,6 +142,14 @@ class TimeLine extends PureComponent {
                mChildMaxValue = VolumeTRender.getMaxValue(mChildMaxValue,point);
                mChildMinValue = VolumeTRender.getMinValue(mChildMinValue,point);
         }
+        //主图的最大最小值处理
+        var yesClose = newlist[0].yc;
+        var offsetValueMax = mValueMax - yesClose;
+        var offsetValueMin = yesClose - mValueMin;
+        var offset = Math.max(offsetValueMax, offsetValueMin);
+        mValueMax = yesClose + offset;
+        mValueMin = yesClose - offset;
+
         var selectedIndex  = this.calculateSelected(newlist);
           return (
             <View style={ styles.container } {...this._panResponder.panHandlers}>
@@ -137,9 +159,9 @@ class TimeLine extends PureComponent {
                     { GridViewHelper.RenderRowDash() }
                     { GridViewHelper.RenderColumnDash() }
 
-                    {this.state.mainDraw.RenderText(newlist[0].yc,mValueMax,mValueMin,"09:30","11:30","15:00")}
+                    {this.state.mainDraw.RenderText(yesClose,mValueMax,mValueMin,offset,"09:30","11:30","15:00")}
                     {this.state.mainDraw.RenderLine(newlist,this)}
-                    {this.state.childDraw.RenderText(newlist[0].yc,mChildMaxValue,mChildMinValue)}
+                    {this.state.childDraw.RenderText(yesClose,mChildMaxValue,mChildMinValue)}
                     {this.state.childDraw.RenderLine(newlist,this,mChildMaxValue,mChildMinValue)}
                     {
                         this.state.onDown?TMarketView.RenderMarketView(this.getX(selectedIndex),this.state.y,newlist[selectedIndex],this):null

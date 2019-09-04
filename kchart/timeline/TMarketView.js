@@ -22,7 +22,7 @@ var childBottom = childStartY + childHeight;
 const TMarketView={};
 
 TMarketView.RenderMarketView=function(x,y,value,timeline){
-        console.log("marketview",x,y,value);
+//        console.log("marketview",x,y,value);
         let arr=[];
         if(y<0||y>childBottom){
             return;
@@ -49,15 +49,22 @@ TMarketView.RenderMarketView=function(x,y,value,timeline){
         //Y轴
         if(y<mainHeight){
             //主图
-           var price =  timeline.getY(y);
+           var price =  timeline.pixelsToValueMain(y);
            var formatP = timeline.getMainFormat(price);
             //主图market矩形框
             linePath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
             arr.push(<Shape key={73} d={ linePath } fill="#4290EE" stroke="#4290EE"/>)
             //价格market
             arr.push(<Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatP} </Text>);
+        }else if(y>childStartY&&y<childBottom){
+              var chlidV =  timeline.pixelsToValueChild(y);
+              var formatv = timeline.getChildFormat(chlidV);
+             //子图market矩形框
+            linePath.moveTo(0,y-8).lineTo(50,y-8).lineTo(50,y+8).lineTo(0,y+8).close();
+            arr.push(<Shape key={73} d={ linePath } fill="#4290EE" stroke="#4290EE"/>)
+            //量market
+            arr.push(<Text key={74}  fill="#FFFFFF" font="10px"  x={0} y={y-6} >{formatv} </Text>);
         }
-
         return arr;
 };
 

@@ -18,12 +18,7 @@ var mainWidth = Config.TimeWidth;
 
 var textHeight = 12;
 //绘制轴上的文字
-MainTRender.RenderText = function(yesClose,max,min,startTime,centerTime,endTime){
-       var offsetValueMax = max - yesClose;
-       var offsetValueMin = yesClose - min;
-       var offset = Math.max(offsetValueMax, offsetValueMin);
-       max = yesClose + offset;
-       min = yesClose - offset;
+MainTRender.RenderText = function(yesClose,max,min,offset,startTime,centerTime,endTime){
         let arrTxt = [];
         //主图Y轴文字
         arrTxt.push(<Text key={0}  fill="#ff0000" font="10px"  x={0} y={0} >{this.formatValue(max)} </Text>);
@@ -85,6 +80,11 @@ MainTRender.RenderLine=function(values,timeline){
 MainTRender.formatValue=function(value){
     var num = new Number(value);
     return num.toFixed(2);
-}
+};
+
+MainTRender.pixelsToValueMain=function(value,max,min){
+        console.log(max,min,mainHeight,value);
+        return max - (max - min) / mainHeight * value;
+};
 
 export   default  MainTRender;
