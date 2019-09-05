@@ -85,12 +85,13 @@ class TimeLine extends PureComponent {
             },
             onPanResponderGrant: (evt, gestureState) => {
                 //手指按下时的画笔起点坐标
-                this.tempfirstX = evt.nativeEvent.pageX;
-                this.tempFirstY = evt.nativeEvent.pageY;
+                this.tempfirstX = evt.nativeEvent.locationX;
+                this.tempFirstY = evt.nativeEvent.locationY;
+                console.log(evt.nativeEvent);
                 console.log("按下");
                 this.setState({
-                    x:gestureState.dx,
-                    x:gestureState.dy,
+                    x:this.tempfirstX,
+                    x:this.tempFirstY,
                     onDown :true
                 });
 
@@ -188,6 +189,8 @@ class TimeLine extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop:100,
+    marginLeft:30,
     width:300,
     alignItems:'center'
   },
